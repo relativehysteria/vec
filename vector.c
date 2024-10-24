@@ -174,10 +174,11 @@ void vec_swap_remove(vector* vec, size_t index) {
 
 // Empties the vector, does not free it.
 void vec_clear(vector* vec) {
+    assert(vec != NULL);
     vec->len = 0;
 }
 
-// Should be called by passing a double pointer as such: 'vec_to_str(&vec)'.
+// Should be called by passing a double pointer as such: `vec_to_str(&vec)`.
 // Deinitializes the vector, freeing up all of the space it occupies.
 // The pointer to the vector as well as its related pointers will be set to
 // `NULL`.
@@ -192,7 +193,7 @@ void vec_free(vector** vec) {
     (*vec) = NULL;
 }
 
-// Should be called by passing a double pointer as such: 'vec_to_str(&vec)'.
+// Should be called by passing a double pointer as such: `vec_to_str(&vec)`.
 // Frees the vector struct and returns the unfreed inner buffer WITHOUT
 // TRUNCATING IT TO ITS CAPACITY BEFOREHAND. Returns NULL if 'vec' is NULL.
 //
@@ -215,12 +216,11 @@ void* vec_leak(vector** vec) {
     return ptr;
 }
 
-// Should be called by passing a double pointer as such: 'vec_to_str(&vec)'.
+// Should be called by passing a double pointer as such: `vec_to_str(&vec)`.
 // Frees the vector struct and returns the inner buffer as a NULL terminated
-// string, or NULL if 'vec' is NULL. It is assumed that the inner buffer
-// is a buffer of `char`.
+// string. It is assumed that the inner buffer is a buffer of `char`.
 //
-// The caller is responsible for freeing it afterwards
+// The caller is responsible for freeing the returned pointer.
 char* vec_to_str(vector** vec) {
     assert(vec != NULL);
     if ((*vec) == NULL) { return; }
@@ -236,11 +236,11 @@ char* vec_to_str(vector** vec) {
     return str;
 }
 
-// Non-destructive alternative to 'vec_to_str()', copies the contents of the
-// vector to a new location in memory, appends '\0' and returns a pointer to it.
-// Assumes that the vector is of 'char' type
+// Non-destructive alternative to `vec_to_str()`, copies the contents of the
+// vector to a new location in memory, appends `\0` and returns a pointer to it.
+// It is assumed that the inner buffer is a buffer of `char`.
 //
-// Returns 'NULL' when allocation fails or when NULL is passed as an argument
+// Returns `NULL` when allocation fails.
 // The caller is responsible for freeing the returned pointer.
 char* vec_clone_str(vector* vec) {
     assert(vec != NULL);
