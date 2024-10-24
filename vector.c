@@ -182,8 +182,10 @@ void vec_clear(vector* vec) {
 // The pointer to the vector as well as its related pointers will be set to
 // `NULL`.
 void vec_free(vector** vec) {
-    if (vec == NULL || (*vec) == NULL)
+    assert(vec != NULL);
+    if ((*vec) == NULL)
         return;
+
     vector* local_vec = (*vec);
     free(local_vec->inner);
     free((*vec));
@@ -197,6 +199,9 @@ void vec_free(vector** vec) {
 // The caller should cast the buffer to appropriate type and is responsible for
 // freeing it afterwards.
 void* vec_leak(vector** vec) {
+    assert(vec != NULL);
+    if ((*vec) == NULL) { return; }
+
     assert(vec != NULL && (*vec) != NULL);
     vector* local_vec = (*vec);
 
@@ -217,7 +222,8 @@ void* vec_leak(vector** vec) {
 //
 // The caller is responsible for freeing it afterwards
 char* vec_to_str(vector** vec) {
-    assert(vec != NULL && (*vec) != NULL);
+    assert(vec != NULL);
+    if ((*vec) == NULL) { return; }
 
     vector* local_vec = (*vec);
 
